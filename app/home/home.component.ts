@@ -2,6 +2,8 @@
 
 import { User } from '../_models/index';
 import { UserService } from '../_services/index';
+import {Dataset} from "../_models/dataset";
+import {DatasetService} from "../_services/dataset.service";
 
 @Component({
     moduleId: module.id,
@@ -11,13 +13,16 @@ import { UserService } from '../_services/index';
 export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
+    datasets: Dataset[] = [];
 
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService, private datasetService: DatasetService) {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        console.log(this.currentUser);
     }
 
     ngOnInit() {
         this.loadAllUsers();
+        this.getAllDatasets();
     }
 
     deleteUser(id: number) {
@@ -25,6 +30,14 @@ export class HomeComponent implements OnInit {
     }
 
     private loadAllUsers() {
-        this.userService.getAll().subscribe(users => { this.users = users; });
+        this.userService.getAll().subscribe(users => {
+            this.users = users;
+        });
+    }
+
+    private getAllDatasets() {
+        this.datasetService.getAll().subscribe(datasets => {
+            this.datasets = datasets
+        });
     }
 }
